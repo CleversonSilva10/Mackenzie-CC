@@ -1,0 +1,4 @@
+Nome: Cleverson
+Palavra sorteada: ['n', 'i', 'g', 'h', 't']
+Número de tentativas: 3
+Tempo total (s): 18.501 

@@ -1,0 +1,2 @@
+# projetowordle
+Projeto Wordle/Termo 
