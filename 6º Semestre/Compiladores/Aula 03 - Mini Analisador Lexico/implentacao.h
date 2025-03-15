@@ -11,7 +11,6 @@ void Aluno(){
 TInfoAtomo obter_atomo(){
     TInfoAtomo info_atomo;
     info_atomo.atomo = ERRO;
-    
     while(*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t'){
         entrada++;
         if(*entrada == '\n'){
