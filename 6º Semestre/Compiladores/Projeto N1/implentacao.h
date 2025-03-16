@@ -50,6 +50,11 @@ TInfoAtomo obter_atomo() {
         return info_atomo;
     }
 
+    if ((*entrada == 59 || *entrada == 44)) {
+        info_atomo = reconhece_ponto_virgula();
+        return info_atomo;
+    }
+
     if (*entrada == '(' || *entrada == ')'){
         info_atomo = reconhecer_parentes();
         return info_atomo;
@@ -101,6 +106,22 @@ TInfoAtomo reconhecer_parentes(){
 
     Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
     return info_parentes;
+}
+
+TInfoAtomo reconhece_ponto_virgula(){
+    TInfoAtomo info_pontoVirgula;
+    info_pontoVirgula.atomo = ERRO;
+
+    if (*entrada == ';'){
+        entrada++;
+        info_pontoVirgula.atomo = PONTO_VIRGULA;
+    }else if (*entrada == ','){
+        entrada++;
+        info_pontoVirgula.atomo = VIRGULA;
+    }
+
+    Apresentar_Atomo(info_pontoVirgula, "MENSAGEM NAO NECESSARIA");
+    return info_pontoVirgula;
 }
 
 TInfoAtomo reconhece_comentario() {
@@ -156,7 +177,9 @@ TInfoAtomo reconhecer_id() {
     memset(info_id.atributo_ID, 0, sizeof(info_id.atributo_ID));
     int i = 0;
 
-    while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n' && *entrada != '(' && *entrada != ')' ){ //ANALISAR ESSA SITUACAO
+    while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n' && *entrada != '(' && *entrada != ')'
+            && *entrada != ';' && *entrada != ',' ){ //ANALISAR ESSA SITUACAO SE ESTA CORRETO
+
         if (!isalpha(*entrada) && !isdigit(*entrada) && *entrada != '_') {
             // SE NAO FOR LETRA, SE NAO FOR DIGITO, SE NAO FOR UNDERLINE
             Apresentar_Atomo(info_id, "Atomo invalido");
@@ -277,5 +300,11 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == FECHA_PAR)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == VIRGULA)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == PONTO_VIRGULA)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 }

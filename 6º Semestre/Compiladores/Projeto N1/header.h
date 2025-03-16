@@ -22,7 +22,9 @@ char *strAtomo[] = {
     "WHILE",
     "WRITEINT",
     "ABRE_PAR",
-    "FECHA_PAR"
+    "FECHA_PAR",
+    "VIRGULA",
+    "PONTO_VIRGULA"
 };
 
 typedef enum{
@@ -41,7 +43,9 @@ typedef enum{
     WHILE,
     WRITEINT,
     ABRE_PAR,
-    FECHA_PAR
+    FECHA_PAR,
+    VIRGULA,
+    PONTO_VIRGULA
 }TAtomo;
 
 typedef struct{
@@ -59,5 +63,5 @@ TInfoAtomo reconhecer_id();
 TInfoAtomo reconhece_comentario();
 TInfoAtomo reconhecer_num();
 TInfoAtomo reconhecer_parentes();
-
+TInfoAtomo reconhece_ponto_virgula();
 
