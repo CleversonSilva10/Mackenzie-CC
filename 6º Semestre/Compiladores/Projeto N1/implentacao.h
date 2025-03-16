@@ -46,14 +46,17 @@ TInfoAtomo obter_atomo() {
         if (*entrada == '\n') {
             contalinhas++;
         }
-        
-        entrada++;
-
         if (*entrada == '\0') {
             info_atomo.atomo = EOS;
             return info_atomo;
         }
+        entrada++;
     }
+
+    // if(*entrada == '(' || *entrada == ')'){
+    //     info_atomo = reconhece_parenteres();
+        
+    // }
 
     if (*entrada == '/') {
         info_atomo = reconhece_comentario();
@@ -92,6 +95,7 @@ TInfoAtomo reconhece_comentario() {
             entrada++; // Para sair da linha de comentário
             info_comentario.linha = contalinhas;
             info_comentario.atomo = COMENTARIO;
+            Apresentar_Atomo(info_comentario, "MENSAGEM NAO NECESSARIA");
             return info_comentario;
         }
 
@@ -108,9 +112,12 @@ TInfoAtomo reconhece_comentario() {
             entrada += 2; // Sair da área de comentários
             info_comentario.linha = contalinhas;
             info_comentario.atomo = COMENTARIO;
+            Apresentar_Atomo(info_comentario, "MENSAGEM NAO NECESSARIA");
             return info_comentario;
         }
     }
+
+    Apresentar_Atomo(info_comentario, "COMENTARIO INVALIDO");
     return info_comentario;
 }
 
@@ -124,6 +131,7 @@ TInfoAtomo reconhecer_id() {
 
     while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n') {
         if (!isalpha(*entrada) && !isdigit(*entrada) && *entrada != '_') {
+            // Apresentar_Atomo(info_id, "Atomo invaldo");
             return info_id;
         }else{
             info_id.atributo_ID[i] = *entrada;
@@ -138,8 +146,8 @@ TInfoAtomo reconhecer_id() {
 
     if (i > 15) {
         info_id.atomo = ERRO;
-        //TESTE - IDENTIFICAR ERRO NO IDENTIFICADOR
-        //printf("\n%03d# %s | ATOMO: %s | Quantidade: %d", info_id.linha, strAtomo[info_id.atomo], info_id.atributo_ID, info_id.quantidade_caracteres);
+        Apresentar_Atomo(info_id, "ATOMO MAIOR DO QUE 15 CARACTERES");
+        return info_id;
     }
 
     if (strcmp(info_id.atributo_ID, "char") == 0) {
@@ -164,7 +172,7 @@ TInfoAtomo reconhecer_id() {
         info_id.atomo = IDENTIFICADOR;
     }
 
-    Apresentar_Atomo(info_id);
+    Apresentar_Atomo(info_id, "Atomo Inválido");
     return info_id;
 }
 
@@ -184,11 +192,12 @@ TInfoAtomo reconhecer_num(){
     info_num.atributo_numero = atof(temp);
     info_num.atomo = NUMERO;
     info_num.linha = contalinhas;
+
+    Apresentar_Atomo(info_num, "Numero invalido");
     return info_num;
 }
 
-void Apresentar_Atomo(TInfoAtomo info_atomo){
-
+void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     if(info_atomo.atomo == IDENTIFICADOR)
         printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
 
@@ -199,12 +208,29 @@ void Apresentar_Atomo(TInfoAtomo info_atomo){
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == ERRO)
-    printf("\n%03d# %s | ", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], mensagem);
 
+    if(info_atomo.atomo == ELSE)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == IF)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == INT)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    
     if(info_atomo.atomo == MAIN)
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
 
-    if(info_atomo.atomo == CHAR)
+    if(info_atomo.atomo == READINT)
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
 
+    if(info_atomo.atomo == VOID)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == WHILE)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == WRITEINT)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
 }
