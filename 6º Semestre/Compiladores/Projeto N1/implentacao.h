@@ -252,7 +252,7 @@ TInfoAtomo reconhecer_id() {
         info_id.atomo = IDENTIFICADOR;
     }
 
-    Apresentar_Atomo(info_id, "Atomo Inválido");
+    Apresentar_Atomo(info_id, "NAO NECESSARIO MENSAGEM");
     return info_id;
 }
 
