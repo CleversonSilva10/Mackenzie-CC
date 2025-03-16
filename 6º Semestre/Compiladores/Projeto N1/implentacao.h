@@ -131,7 +131,8 @@ TInfoAtomo reconhecer_id() {
 
     while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n') {
         if (!isalpha(*entrada) && !isdigit(*entrada) && *entrada != '_') {
-            // Apresentar_Atomo(info_id, "Atomo invaldo");
+            // SE NAO FOR LETRA, SE NAO FOR DIGITO, SE NAO FOR UNDERLINE
+            Apresentar_Atomo(info_id, "Atomo invalido");
             return info_id;
         }else{
             info_id.atributo_ID[i] = *entrada;
@@ -152,22 +153,30 @@ TInfoAtomo reconhecer_id() {
 
     if (strcmp(info_id.atributo_ID, "char") == 0) {
         info_id.atomo = CHAR;
-    } else if (strcmp(info_id.atributo_ID, "else") == 0) {
-        info_id.atomo = ELSE;
-    } else if (strcmp(info_id.atributo_ID, "if") == 0) {
-        info_id.atomo = IF;
-    } else if (strcmp(info_id.atributo_ID, "int") == 0) {
-        info_id.atomo = INT;
-    } else if (strcmp(info_id.atributo_ID, "main") == 0) {
-        info_id.atomo = MAIN;
-    } else if (strcmp(info_id.atributo_ID, "readint") == 0) {
-        info_id.atomo = READINT;
-    } else if (strcmp(info_id.atributo_ID, "void") == 0) {
-        info_id.atomo = VOID;
-    } else if (strcmp(info_id.atributo_ID, "while") == 0) {
-        info_id.atomo = WHILE;
-    } else if (strcmp(info_id.atributo_ID, "writeint") == 0) {
-        info_id.atomo = WRITEINT;
+    } else 
+        if (strcmp(info_id.atributo_ID, "else") == 0) {
+            info_id.atomo = ELSE;
+    } else 
+        if (strcmp(info_id.atributo_ID, "if") == 0) {
+            info_id.atomo = IF;
+    } else 
+        if (strcmp(info_id.atributo_ID, "int") == 0) {
+            info_id.atomo = INT;
+    } else 
+        if (strcmp(info_id.atributo_ID, "main") == 0) {
+            info_id.atomo = MAIN;
+    } else 
+        if (strcmp(info_id.atributo_ID, "readint") == 0) {
+            info_id.atomo = READINT;
+    } else 
+        if (strcmp(info_id.atributo_ID, "void") == 0) {
+            info_id.atomo = VOID;
+    } else 
+        if (strcmp(info_id.atributo_ID, "while") == 0) {
+            info_id.atomo = WHILE;
+    } else 
+        if (strcmp(info_id.atributo_ID, "writeint") == 0) {
+            info_id.atomo = WRITEINT;
     }else{
         info_id.atomo = IDENTIFICADOR;
     }
@@ -209,6 +218,9 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
 
     if(info_atomo.atomo == ERRO)
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], mensagem);
+
+    if(info_atomo.atomo == CHAR)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
 
     if(info_atomo.atomo == ELSE)
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
