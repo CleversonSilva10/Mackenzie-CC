@@ -40,10 +40,18 @@ char *lerArquivo(const char *nomeArquivo) {
 TInfoAtomo obter_atomo() {
     TInfoAtomo info_atomo;
     info_atomo.atomo = ERRO;
-    info_atomo = CaracteresDemilitadores(info_atomo);
+
+    info_atomo = CaracteresDemilitadores();
     
+    // entrada = "//asdasd(aa";
+
     if (*entrada == '/') {
         info_atomo = reconhece_comentario();
+        return info_atomo;
+    }
+
+    if (*entrada == '(' || *entrada == ')'){
+        info_atomo = reconhecer_parentes();
         return info_atomo;
     }
 
@@ -57,23 +65,42 @@ TInfoAtomo obter_atomo() {
         return info_atomo;
     }
 
-    info_atomo.linha = contalinhas;
-    return info_atomo;
+    return info_atomo; // ATOMO ERRO
 }
 
-TInfoAtomo CaracteresDemilitadores(TInfoAtomo info_atomo){
+TInfoAtomo CaracteresDemilitadores(){
+    TInfoAtomo info_demilitadores;
+    info_demilitadores.atomo = ERRO;
+
     while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
         if (*entrada == '\n') {
             contalinhas++;
         }
         if (*entrada == '\0') {
-            info_atomo.atomo = EOS;
-            return info_atomo;
+            info_demilitadores.atomo = EOS;
+            return info_demilitadores;
         }
         entrada++;
     }
+    info_demilitadores.linha = contalinhas;
     //Chegando aqui estou com um caracter que precisa ser analisado
-    return info_atomo; // Já saiu dos caracteres delimitadores
+    return info_demilitadores; // Já saiu dos caracteres delimitadores
+}
+
+TInfoAtomo reconhecer_parentes(){
+    TInfoAtomo info_parentes;
+    info_parentes.atomo = ERRO;
+
+    if(*entrada == '('){
+        entrada++;
+        info_parentes.atomo = ABRE_PAR;
+    }else{
+        entrada++;
+        info_parentes.atomo = FECHA_PAR;
+    }
+
+    Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
+    return info_parentes;
 }
 
 TInfoAtomo reconhece_comentario() {
@@ -129,7 +156,7 @@ TInfoAtomo reconhecer_id() {
     memset(info_id.atributo_ID, 0, sizeof(info_id.atributo_ID));
     int i = 0;
 
-    while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n') {
+    while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n' && *entrada != '(' && *entrada != ')' ){ //ANALISAR ESSA SITUACAO
         if (!isalpha(*entrada) && !isdigit(*entrada) && *entrada != '_') {
             // SE NAO FOR LETRA, SE NAO FOR DIGITO, SE NAO FOR UNDERLINE
             Apresentar_Atomo(info_id, "Atomo invalido");
@@ -245,4 +272,10 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
 
     if(info_atomo.atomo == WRITEINT)
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == ABRE_PAR)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == FECHA_PAR)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 }

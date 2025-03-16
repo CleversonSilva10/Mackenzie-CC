@@ -20,7 +20,9 @@ char *strAtomo[] = {
     "READINT", 
     "VOID",
     "WHILE",
-    "WRITEINT"
+    "WRITEINT",
+    "ABRE_PAR",
+    "FECHA_PAR"
 };
 
 typedef enum{
@@ -37,7 +39,9 @@ typedef enum{
     READINT, 
     VOID,
     WHILE,
-    WRITEINT
+    WRITEINT,
+    ABRE_PAR,
+    FECHA_PAR
 }TAtomo;
 
 typedef struct{
@@ -49,11 +53,11 @@ typedef struct{
 }TInfoAtomo;
 
 void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem);
-TInfoAtomo CaracteresDemilitadores(TInfoAtomo info_atomo);
+TInfoAtomo CaracteresDemilitadores();
 TInfoAtomo obter_atomo();
 TInfoAtomo reconhecer_id();
 TInfoAtomo reconhece_comentario();
 TInfoAtomo reconhecer_num();
-
+TInfoAtomo reconhecer_parentes();
 
 

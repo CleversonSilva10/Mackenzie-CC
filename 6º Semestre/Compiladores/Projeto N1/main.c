@@ -22,7 +22,8 @@ int main(){
     //entrada = "var1 _var1 _b1ar _var2 _var3 _var4 _var5 _var6 12.4 12.4 12.4 12.4 12.4//aaabbbaa//\n\n/*aaaa*/";
     //entrada = "_var6 12.4 12.4 12.4 12.4 12.4//aaabbbaa//\n\n/*aaaa*/var1 _var1 _b1ar _var2 _var3 _var4 _var5";
     //entrada = "12.4 12.4 12.4 12.4 12.4\n\n12.4"; // ESTA OK
-    entrada = "main\n_main\n\nint\nchar palmeiras writeint charaaa bbbb ccccccccc\na";
+    //entrada = "main\n_main\n\nint\nchar palmeiras writeint charaaa bbbb ccccccccc\na";
+    entrada = "(asdasddas)";
     
     //entrada = "12.4\naaa\n\n//asdasdasd//var1/*asdasdasd*/"; VERIFICAR ESSA SITUACAO
 
