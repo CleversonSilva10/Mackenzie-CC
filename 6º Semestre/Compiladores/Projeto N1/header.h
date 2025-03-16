@@ -23,6 +23,8 @@ char *strAtomo[] = {
     "WRITEINT",
     "ABRE_PAR",
     "FECHA_PAR",
+    "ABRE_CHAVE",
+    "FECHA_CHAVE",
     "VIRGULA",
     "PONTO_VIRGULA"
 };
@@ -44,6 +46,8 @@ typedef enum{
     WRITEINT,
     ABRE_PAR,
     FECHA_PAR,
+    ABRE_CHAVE,
+    FECHA_CHAVE,
     VIRGULA,
     PONTO_VIRGULA
 }TAtomo;
@@ -64,4 +68,5 @@ TInfoAtomo reconhece_comentario();
 TInfoAtomo reconhecer_num();
 TInfoAtomo reconhecer_parentes();
 TInfoAtomo reconhece_ponto_virgula();
+TInfoAtomo reconhecer_chaves();
 

@@ -50,13 +50,18 @@ TInfoAtomo obter_atomo() {
         return info_atomo;
     }
 
-    if ((*entrada == 59 || *entrada == 44)) {
+    if ((*entrada == ';' || *entrada == ',')) {
         info_atomo = reconhece_ponto_virgula();
         return info_atomo;
     }
 
     if (*entrada == '(' || *entrada == ')'){
         info_atomo = reconhecer_parentes();
+        return info_atomo;
+    }
+
+    if (*entrada == '{' || *entrada == '}'){
+        info_atomo = reconhecer_chaves();
         return info_atomo;
     }
 
@@ -106,6 +111,22 @@ TInfoAtomo reconhecer_parentes(){
 
     Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
     return info_parentes;
+}
+
+TInfoAtomo reconhecer_chaves(){
+    TInfoAtomo info_chaves;
+    info_chaves.atomo = ERRO;
+
+    if(*entrada == '{'){
+        entrada++;
+        info_chaves.atomo = ABRE_CHAVE;
+    }else{
+        entrada++;
+        info_chaves.atomo = FECHA_CHAVE;
+    }
+
+    Apresentar_Atomo(info_chaves, "MENSAGEM NAO NECESSARIA");
+    return info_chaves;
 }
 
 TInfoAtomo reconhece_ponto_virgula(){
@@ -270,31 +291,31 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], mensagem);
 
     if(info_atomo.atomo == CHAR)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == ELSE)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == IF)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == INT)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
     
     if(info_atomo.atomo == MAIN)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == READINT)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == VOID)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == WHILE)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == WRITEINT)
-    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == ABRE_PAR)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
@@ -306,5 +327,11 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == PONTO_VIRGULA)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == ABRE_CHAVE)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == FECHA_CHAVE)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 }

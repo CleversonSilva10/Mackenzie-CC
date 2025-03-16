@@ -14,7 +14,7 @@ int main(){
     //TESTES
     //entrada = "12.4"; RECONHECE NUMERO
     //entrada = "abbbaa   \n//hasuhuashuash\n/*asdasdasdasd*/_avabaa aaaaaaaaaaa _avabaa\naaaaaaaaaaaaaaaaaaaaaa"; // RECONHECE ATOMO
-    //entrada = "void main\nint aba\nchar palmeiras";
+    entrada = "void main\nint aba\nchar palmeiras";
     //entrada = "aaaaaaaaaaaaaaaaa"; // RECONHECE ATOMO
     //entrada = '_avabaa';
 
@@ -24,7 +24,7 @@ int main(){
     //entrada = "12.4 12.4 12.4 12.4 12.4\n\n12.4"; // ESTA OK
     //entrada = "main\n_main\n\nint\nchar palmeiras writeint charaaa bbbb ccccccccc\na";
     //entrada = ",asdasd,";
-    entrada = ";,";
+    //entrada = ";,{}";
     //entrada = "(;)";
 
     //entrada = "12.4\naaa\n\n//asdasdasd//var1/*asdasdasd*/"; VERIFICAR ESSA SITUACAO
