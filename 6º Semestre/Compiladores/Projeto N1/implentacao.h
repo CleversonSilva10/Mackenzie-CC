@@ -42,8 +42,6 @@ TInfoAtomo obter_atomo() {
     info_atomo.atomo = ERRO;
 
     info_atomo = CaracteresDemilitadores();
-    
-    // entrada = "//asdasd(aa";
 
     if (*entrada == '/') {
         info_atomo = reconhece_comentario();
@@ -291,31 +289,31 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], mensagem);
 
     if(info_atomo.atomo == CHAR)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == ELSE)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == IF)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == INT)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
     
     if(info_atomo.atomo == MAIN)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == READINT)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == VOID)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == WHILE)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == WRITEINT)
-    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    printf("\n%03d# %s | PALAVRA RESERVADA", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == ABRE_PAR)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
