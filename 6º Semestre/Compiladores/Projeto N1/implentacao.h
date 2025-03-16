@@ -164,6 +164,7 @@ TInfoAtomo reconhecer_id() {
         info_id.atomo = IDENTIFICADOR;
     }
 
+    Apresentar_Atomo(info_id);
     return info_id;
 }
 
@@ -184,4 +185,26 @@ TInfoAtomo reconhecer_num(){
     info_num.atomo = NUMERO;
     info_num.linha = contalinhas;
     return info_num;
+}
+
+void Apresentar_Atomo(TInfoAtomo info_atomo){
+
+    if(info_atomo.atomo == IDENTIFICADOR)
+        printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == NUMERO)
+        printf("\n%03d# %s | %f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
+
+    if(info_atomo.atomo == COMENTARIO)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == ERRO)
+    printf("\n%03d# %s | ", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == MAIN)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+    if(info_atomo.atomo == CHAR)
+    printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
 }
