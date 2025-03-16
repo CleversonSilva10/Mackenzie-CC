@@ -201,6 +201,7 @@ TInfoAtomo reconhecer_id() {
 
         if (!isalpha(*entrada) && !isdigit(*entrada) && *entrada != '_') {
             // SE NAO FOR LETRA, SE NAO FOR DIGITO, SE NAO FOR UNDERLINE
+            info_id.linha = contalinhas;
             Apresentar_Atomo(info_id, "Atomo invalido");
             return info_id;
         }else{

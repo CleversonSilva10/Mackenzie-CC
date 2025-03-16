@@ -31,7 +31,9 @@ int main(){
     Aluno();
     TInfoAtomo info_atomo;
 
-    entrada = "(main Main)";
+    //entrada = "(main Main)";
+    //entrada = lerArquivo("teste.txt");
+    entrada = "12.4\naaa\n\n//asdasdasd//\nvar1/*asdasdasd*/";
     //entrada = "main\n_main\n\nint\nchar palmeiras writeint charaaa bbbb  ccccccccc ccccccccc ccccccccc ccccccccc ccccccccc ccccccccc ccccccccc\na";
     printf("\nIniciando leitura do arquivo...\n");
 
