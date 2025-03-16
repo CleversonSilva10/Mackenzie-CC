@@ -37,31 +37,36 @@ char *lerArquivo(const char *nomeArquivo) {
     return conteudo;
 }
 
-TInfoAtomo obter_atomo(){
+TInfoAtomo obter_atomo() {
     TInfoAtomo info_atomo;
     info_atomo.atomo = ERRO;
 
-    if (*entrada == '/'){
+    // Ignorar espaços em branco e novas linhas antes de reconhecer qualquer token
+    while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
+        if (*entrada == '\n') {
+            contalinhas++;
+        }
+        
+        entrada++;
+        if (*entrada == '\0') {
+            info_atomo.atomo = EOS;
+            return info_atomo;
+        }
+    }
+
+    if (*entrada == '/') {
         info_atomo = reconhece_comentario();
         return info_atomo;
     }
 
-    if (isdigit(*entrada)){
+    if (isdigit(*entrada)) {
         info_atomo = reconhecer_num();
+        return info_atomo;
     }
-    else if (isalpha(*entrada) || *entrada == '_'){
+
+    if (isalpha(*entrada) || *entrada == '_') {
         info_atomo = reconhecer_id();
-    }
-    
-    while(*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t'){
-        entrada++;
-        if(*entrada == '\0'){
-            info_atomo.atomo = EOS;
-            return info_atomo;
-        }
-        if(*entrada == '\n'){
-            contalinhas++;
-        }
+        return info_atomo;
     }
 
     info_atomo.linha = contalinhas;
@@ -72,43 +77,92 @@ TInfoAtomo reconhece_comentario() {
     TInfoAtomo info_comentario;
     info_comentario.atomo = ERRO;
 
-    if((*entrada == '/' && *(entrada+1) == '/') || (*entrada == '/' && *(entrada+1) == '*')){
-        entrada += 2; // Dentro do Comentario
-        while ((*entrada != '/' && *(entrada+1) != '/') || (*entrada != '/' && *(entrada+1) != '/')){
-            if(*entrada == '\n'){
-                contalinhas++;
-            }else if (*entrada == '\0'){
-                return info_comentario;
+    if ((*entrada == '/' && *(entrada + 1) == '/') || (*entrada == '/' && *(entrada + 1) == '*')) {
+
+        if (*entrada == '/' && *(entrada + 1) == '/') {
+            entrada += 2; // Dentro do Comentário
+            while (*entrada != '\n' && *entrada != '\0') { // Garantir que não saia por erro
+                entrada++;
             }
-            entrada++;
+            if (*entrada == '\n') {
+                contalinhas++;
+            }
+
+            entrada++; // Para sair da linha de comentário
+            info_comentario.linha = contalinhas;
+            info_comentario.atomo = COMENTARIO;
+            return info_comentario;
+        }
+
+        if (*entrada == '/' && *(entrada + 1) == '*') {
+            entrada += 2; // Dentro do Comentário
+            while (*entrada != '*' || *(entrada + 1) != '/') {
+                if (*entrada == '\n') {
+                    contalinhas++;
+                } else if (*entrada == '\0') {
+                    return info_comentario; // Comentário sem fechamento
+                }
+                entrada++;
+            }
+            entrada += 2; // Sair da área de comentários
+            info_comentario.linha = contalinhas;
+            info_comentario.atomo = COMENTARIO;
+            return info_comentario;
         }
     }
-
-    entrada += 2;
-    info_comentario.linha = contalinhas;
-    info_comentario.atomo = COMENTARIO;
     return info_comentario;
 }
 
 
-TInfoAtomo reconhecer_id(){
+
+TInfoAtomo reconhecer_id() {
     TInfoAtomo info_id;
     info_id.atomo = ERRO;
-    int i = 0;  // Índice para armazenar letras em atributo_ID
+    memset(info_id.atributo_ID, 0, sizeof(info_id.atributo_ID));
+    int i = 0;
 
     while (*entrada != '\0' && *entrada != ' ' && *entrada != '\n') {
         if (!isalpha(*entrada) && !isdigit(*entrada) && *entrada != '_') {
             return info_id;
-    }
-        if (i < 16) {  // Certifique-se de não ultrapassar o tamanho do array
-            info_id.atributo_ID[i] = *entrada;  // Armazena o caractere em atributo_ID
+        }else{
+            info_id.atributo_ID[i] = *entrada;
             i++;
+            entrada++;
         }
-        entrada++;
+    }
+    
+    info_id.atributo_ID[i] = '\0';
+    info_id.quantidade_caracteres = i;
+    info_id.linha = contalinhas;
+
+    if (i > 15) {
+        info_id.atomo = ERRO;
+        //TESTE - IDENTIFICAR ERRO NO IDENTIFICADOR
+        //printf("\n%03d# %s | ATOMO: %s | Quantidade: %d", info_id.linha, strAtomo[info_id.atomo], info_id.atributo_ID, info_id.quantidade_caracteres);
     }
 
-    info_id.atributo_ID[i] = '\0';  // Finaliza a string com o caractere nulo
-    info_id.atomo = IDENTIFICADOR;
+    if (strcmp(info_id.atributo_ID, "char") == 0) {
+        info_id.atomo = CHAR;
+    } else if (strcmp(info_id.atributo_ID, "else") == 0) {
+        info_id.atomo = ELSE;
+    } else if (strcmp(info_id.atributo_ID, "if") == 0) {
+        info_id.atomo = IF;
+    } else if (strcmp(info_id.atributo_ID, "int") == 0) {
+        info_id.atomo = INT;
+    } else if (strcmp(info_id.atributo_ID, "main") == 0) {
+        info_id.atomo = MAIN;
+    } else if (strcmp(info_id.atributo_ID, "readint") == 0) {
+        info_id.atomo = READINT;
+    } else if (strcmp(info_id.atributo_ID, "void") == 0) {
+        info_id.atomo = VOID;
+    } else if (strcmp(info_id.atributo_ID, "while") == 0) {
+        info_id.atomo = WHILE;
+    } else if (strcmp(info_id.atributo_ID, "writeint") == 0) {
+        info_id.atomo = WRITEINT;
+    }else{
+        info_id.atomo = IDENTIFICADOR;
+    }
+
     return info_id;
 }
 
@@ -127,5 +181,6 @@ TInfoAtomo reconhecer_num(){
     temp[i] = '\0';
     info_num.atributo_numero = atof(temp);
     info_num.atomo = NUMERO;
+    info_num.linha = contalinhas;
     return info_num;
 }

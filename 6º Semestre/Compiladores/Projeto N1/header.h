@@ -4,15 +4,40 @@
 #include <string.h>
 
 void Aluno();
-;//extern char *entrada;
-char *strAtomo[]={"ERRO", "IDENTIFICADOR", "NUMERO", "COMENTARIO","EOS"};
+//extern char *entrada;
+
+char *strAtomo[] = {
+    "ERRO", 
+    "IDENTIFICADOR", 
+    "NUMERO", 
+    "COMENTARIO",
+    "EOS",
+    "CHAR", 
+    "ELSE", 
+    "IF",
+    "INT", 
+    "MAIN",
+    "READINT", 
+    "VOID",
+    "WHILE",
+    "WRITEINT"
+};
 
 typedef enum{
     ERRO,
     IDENTIFICADOR,
     NUMERO,
     COMENTARIO,
-    EOS
+    EOS,
+    CHAR, 
+    ELSE, 
+    IF,
+    INT, 
+    MAIN,
+    READINT, 
+    VOID,
+    WHILE,
+    WRITEINT
 }TAtomo;
 
 typedef struct{
@@ -20,6 +45,7 @@ typedef struct{
     int linha;
     float atributo_numero;
     char atributo_ID[16];
+    int quantidade_caracteres;
 }TInfoAtomo;
 
 TInfoAtomo obter_atomo();
