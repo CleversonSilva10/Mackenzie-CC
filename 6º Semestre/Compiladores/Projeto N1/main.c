@@ -14,7 +14,7 @@ int main(){
     //entrada = "var1 _var1 _b1ar _var2 _var3 _var4 _var5 _var6 12.4 12.4 12.4 12.4 12.4//aaabbbaa//\n\n/*aaaa*/";
     //entrada = "_var6 12.4 12.4 12.4 12.4 12.4//aaabbbaa//\n\n/*aaaa*/var1 _var1 _b1ar _var2 _var3 _var4 _var5";
     //entrada = "12.4 12.4 12.4 12.4 12.4\n\n12.4";
-    entrada = "main aaa bbbb ccccccccccccccccc";
+    entrada = "main charaaa bbbb ccccccccccccccccc";
     //entrada = "12.4\naaa\n\n//asdasdasd//\nvar1/*asdasdasd*/";
     printf("\nIniciando leitura do arquivo...\n");
 
@@ -33,6 +33,9 @@ int main(){
         printf("\n%03d# %s | ", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
         if(info_atomo.atomo == MAIN)
+        printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
+
+        if(info_atomo.atomo == CHAR)
         printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
     
     }while(info_atomo.atomo != ERRO && info_atomo.atomo != EOS);

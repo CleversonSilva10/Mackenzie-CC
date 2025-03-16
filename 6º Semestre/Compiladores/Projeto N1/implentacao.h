@@ -48,6 +48,7 @@ TInfoAtomo obter_atomo() {
         }
         
         entrada++;
+
         if (*entrada == '\0') {
             info_atomo.atomo = EOS;
             return info_atomo;
