@@ -49,6 +49,7 @@ typedef struct{
 }TInfoAtomo;
 
 void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem);
+TInfoAtomo CaracteresDemilitadores(TInfoAtomo info_atomo);
 TInfoAtomo obter_atomo();
 TInfoAtomo reconhecer_id();
 TInfoAtomo reconhece_comentario();

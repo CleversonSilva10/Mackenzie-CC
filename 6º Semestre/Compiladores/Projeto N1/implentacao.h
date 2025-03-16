@@ -40,24 +40,8 @@ char *lerArquivo(const char *nomeArquivo) {
 TInfoAtomo obter_atomo() {
     TInfoAtomo info_atomo;
     info_atomo.atomo = ERRO;
-
-    // Ignorar espaços em branco e novas linhas antes de reconhecer qualquer token
-    while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
-        if (*entrada == '\n') {
-            contalinhas++;
-        }
-        if (*entrada == '\0') {
-            info_atomo.atomo = EOS;
-            return info_atomo;
-        }
-        entrada++;
-    }
-
-    // if(*entrada == '(' || *entrada == ')'){
-    //     info_atomo = reconhece_parenteres();
-        
-    // }
-
+    info_atomo = CaracteresDemilitadores(info_atomo);
+    
     if (*entrada == '/') {
         info_atomo = reconhece_comentario();
         return info_atomo;
@@ -77,6 +61,21 @@ TInfoAtomo obter_atomo() {
     return info_atomo;
 }
 
+TInfoAtomo CaracteresDemilitadores(TInfoAtomo info_atomo){
+    while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
+        if (*entrada == '\n') {
+            contalinhas++;
+        }
+        if (*entrada == '\0') {
+            info_atomo.atomo = EOS;
+            return info_atomo;
+        }
+        entrada++;
+    }
+    //Chegando aqui estou com um caracter que precisa ser analisado
+    return info_atomo; // Já saiu dos caracteres delimitadores
+}
+
 TInfoAtomo reconhece_comentario() {
     TInfoAtomo info_comentario;
     info_comentario.atomo = ERRO;
@@ -88,11 +87,13 @@ TInfoAtomo reconhece_comentario() {
             while (*entrada != '\n' && *entrada != '\0') { // Garantir que não saia por erro
                 entrada++;
             }
+
             if (*entrada == '\n') {
                 contalinhas++;
+                entrada++;
             }
 
-            entrada++; // Para sair da linha de comentário
+             // Para sair da linha de comentário
             info_comentario.linha = contalinhas;
             info_comentario.atomo = COMENTARIO;
             Apresentar_Atomo(info_comentario, "MENSAGEM NAO NECESSARIA");
@@ -120,7 +121,6 @@ TInfoAtomo reconhece_comentario() {
     Apresentar_Atomo(info_comentario, "COMENTARIO INVALIDO");
     return info_comentario;
 }
-
 
 
 TInfoAtomo reconhecer_id() {
