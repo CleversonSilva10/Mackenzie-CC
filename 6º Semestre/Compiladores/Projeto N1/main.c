@@ -5,13 +5,18 @@
 
 // gcc main.c -Wall -Og -g -o MiniAnalisadorLexico
 
+// TESTE A
+// TESTE B
+// TESTE C
+// TESTE D
+//  TESTE E
+// REVER TESTE F
+
 int main(){
     Aluno();
     TInfoAtomo info_atomo;
 
-    //TESTE B
-
-    entrada = ler_arquivo("Arquivos de Teste/Arquivo_B.txt");
+    entrada = ler_arquivo("Arquivos de Teste/Arquivo_F.txt");
     printf("\nIniciando leitura do arquivo...\n");
 
     do{

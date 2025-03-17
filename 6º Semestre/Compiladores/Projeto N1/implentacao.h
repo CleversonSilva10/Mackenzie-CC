@@ -291,7 +291,7 @@ TInfoAtomo reconhecer_chaves(){
         info_chaves.atomo = FECHA_CHAVE;
     }
 
-    Apresentar_Atomo(info_chaves, "MENSAGEM NAO NECESSARIA");
+    
     return info_chaves;
 }
 
