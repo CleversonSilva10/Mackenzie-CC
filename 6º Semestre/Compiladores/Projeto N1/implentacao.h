@@ -9,33 +9,31 @@ void Aluno(){
     printf("-------------------------------------------\n");
 }
 
-char *lerArquivo(const char *nomeArquivo) {
-    FILE *arquivo = fopen(nomeArquivo, "r");
+char *ler_arquivo(const char *nome_arquivo) {
+    FILE *arquivo = fopen(nome_arquivo, "r"); // Abre o arquivo para leitura
     if (!arquivo) {
-        printf("Erro ao abrir o arquivo.\n");
+        perror("Erro ao abrir o arquivo");
         return NULL;
     }
 
-    // Descobrir o tamanho do arquivo
     fseek(arquivo, 0, SEEK_END);
     long tamanho = ftell(arquivo);
     rewind(arquivo);
 
-    // Alocar memória para armazenar o conteúdo
-    char *conteudo = (char *)malloc((tamanho + 1) * sizeof(char));
+    char *conteudo = (char *)malloc(tamanho + 1);
     if (!conteudo) {
-        printf("Erro ao alocar memória.\n");
+        perror("Erro ao alocar memória");
         fclose(arquivo);
         return NULL;
     }
 
-    // Ler o arquivo para a string
     fread(conteudo, 1, tamanho, arquivo);
-    conteudo[tamanho] = '\0'; // Garantir terminação da string
+    conteudo[tamanho] = '\0';
 
-    fclose(arquivo);
-    return conteudo;
+    fclose(arquivo); // Fecha o arquivo
+    return conteudo; // Retorna o conteúdo lido
 }
+
 
 TInfoAtomo obter_atomo() {
     TInfoAtomo info_atomo;
@@ -45,6 +43,28 @@ TInfoAtomo obter_atomo() {
 
     if (*entrada == '/') {
         info_atomo = reconhece_comentario();
+        // *entrada == '/' DIVISAO
+        return info_atomo;
+    }
+
+    if (*entrada == '='){ // Operação de ATRIBUIÇÃO
+        info_atomo = reconhece_Operando();
+        return info_atomo;
+    }
+
+    if  ((*entrada == '|' && *(entrada+1) == '|') || (*entrada == '&' && *(entrada+1) == '&') || 
+        (*entrada == '=' && *(entrada+1) == '=') || (*entrada == '!' && *(entrada+1) == '=')){
+        info_atomo = reconhece_Operando();
+        return info_atomo;  
+    }
+    // Operação de comparação
+    if ((*entrada == '<') || (*entrada == '<' && *(entrada+1) == '=') || (*entrada == '>') || (*entrada == '>' && *(entrada+1) == '=')){
+            info_atomo = reconhece_Operando();
+            return info_atomo;
+        }
+
+    if ((*entrada == '+') || (*entrada == '-') || (*entrada == '*') || (*entrada == '/' && *(entrada+1) != '/')){
+        info_atomo = reconhece_Operando();
         return info_atomo;
     }
 
@@ -74,6 +94,70 @@ TInfoAtomo obter_atomo() {
     }
 
     return info_atomo; // ATOMO ERRO
+}
+
+TInfoAtomo reconhece_Operando(){
+    TInfoAtomo info_operador;
+    info_operador.atomo = ERRO;
+
+    if (*entrada == '=') {
+        entrada++;
+        info_operador.atomo = ATRIBUICAO;
+    } 
+    else if (*entrada == '|') {
+        if (*(entrada + 1) == '|'){
+            entrada += 2;
+            info_operador.atomo = OPERADOR_COMPARACAO_OR;
+        }
+    } 
+    else if (*entrada == '&') {
+        if (*(entrada + 1) == '&') {
+            entrada += 2;
+            info_operador.atomo = OPERADOR_COMPARACAO_AND;
+        }
+    } 
+    else if (*entrada == '<') {
+        if (*(entrada + 1) == '=') {
+            entrada += 2;
+            info_operador.atomo = OPERADOR_COMPARACAO_MENOR_IGUAL;
+        } else {
+            entrada++;
+            info_operador.atomo = OPERADOR_COMPARACAO_MENOR;
+        }
+    } 
+    else if (*entrada == '>') {
+        if (*(entrada + 1) == '=') {
+            entrada += 2;
+            info_operador.atomo = OPERADOR_COMPARACAO_MAIOR_IGUAL;
+        } else {
+            entrada++;
+            info_operador.atomo = OPERADOR_COMPARACAO_MAIOR;
+        }
+    } 
+    else if (*entrada == '!') {
+        if (*(entrada + 1) == '=') {
+            entrada += 2;
+            info_operador.atomo = OPERADOR_COMPARACAO_DIFERENTE;
+        }
+    }else if (*entrada == '+') {
+        entrada++;
+        info_operador.atomo = OPERADOR_SOMA;
+    } 
+    else if (*entrada == '-') {
+        entrada++;
+        info_operador.atomo = OPERADOR_SUBTRACAO;
+    } 
+    else if (*entrada == '*') {
+        entrada++;
+        info_operador.atomo = OPERADOR_MULTIPLICACAO;
+    } 
+    else if (*entrada == '/') {
+        entrada++;
+        info_operador.atomo = OPERADOR_DIVISAO;
+    }
+
+    Apresentar_Atomo(info_operador, "MENSAGEM NAO NECESSARIA");
+    return info_operador;    
 }
 
 TInfoAtomo CaracteresDemilitadores(){
@@ -332,5 +416,38 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == FECHA_CHAVE)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == ATRIBUICAO)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_OR)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_AND)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_MENOR_IGUAL)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_MENOR)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_MAIOR_IGUAL)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_MAIOR)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_DIFERENTE)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_SUBTRACAO)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_MULTIPLICACAO)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
+    if(info_atomo.atomo == OPERADOR_DIVISAO)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 }

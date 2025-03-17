@@ -5,36 +5,11 @@
 
 // gcc main.c -Wall -Og -g -o MiniAnalisadorLexico
 
-    //entrada = ",asdasd,";
-    //entrada = ";,{}";
-    //entrada = "(;)";
-
-    //entrada = "12.4\naaa\n\n//asdasdasd//var1/*asdasdasd*/"; VERIFICAR ESSA SITUACAO
-
-    //entrada = "CHAR ELSE IF INT MAIN READINT VOID WHILE WRITEINT";
-    //entrada = "char";
-
-        //entrada = "aaaaaaaaaaaaaaaaa"; // RECONHECE ATOMO
-    //entrada = '_avabaa';
-
-
-    //entrada = "var1 _var1 _b1ar _var2 _var3 _var4 _var5 _var6 12.4 12.4 12.4 12.4 12.4//aaabbbaa//\n\n/*aaaa*/";
-    //entrada = "_var6 12.4 12.4 12.4 12.4 12.4//aaabbbaa//\n\n/*aaaa*/var1 _var1 _b1ar _var2 _var3 _var4 _var5";
-    //entrada = "12.4 12.4 12.4 12.4 12.4\n\n12.4"; // ESTA OK
-    //entrada = lerArquivo("teste.txt");    
-    
-    //TESTES
-    //entrada = "12.4"; RECONHECE NUMERO
-    //entrada = "abbbaa   \n//hasuhuashuash\n/*asdasdasdasd*/_avabaa aaaaaaaaaaa _avabaa\naaaaaaaaaaaaaaaaaaaaaa"; // RECONHECE ATOMO
-
 int main(){
     Aluno();
     TInfoAtomo info_atomo;
 
-    //entrada = "(main Main)";
-    //entrada = lerArquivo("teste.txt");
-    entrada = "12.4\naaa\n\n//asdasdasd//\nvar1/*asdasdasd*/";
-    //entrada = "main\n_main\n\nint\nchar palmeiras writeint charaaa bbbb  ccccccccc ccccccccc ccccccccc ccccccccc ccccccccc ccccccccc ccccccccc\na";
+    entrada = ler_arquivo("arquivo_teste12.txt");
     printf("\nIniciando leitura do arquivo...\n");
 
     do{
