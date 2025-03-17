@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-void Aluno();
+
 //extern char *entrada;
 
 char *strAtomo[] = {
@@ -92,6 +92,7 @@ typedef struct{
 
 char *ler_arquivo(const char *nome_arquivo);
 void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem);
+void Aluno();
 TInfoAtomo CaracteresDemilitadores();
 TInfoAtomo obter_atomo();
 TInfoAtomo reconhecer_id();

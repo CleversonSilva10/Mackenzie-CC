@@ -106,6 +106,28 @@ TInfoAtomo obter_atomo() {
     return info_atomo; // ATOMO ERRO
 }
 
+TInfoAtomo CaracteresDemilitadores(){
+    TInfoAtomo info_demilitadores;
+    info_demilitadores.atomo = ERRO;
+
+    while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
+        if (*entrada == '\n') {
+            contalinhas++;
+        }
+
+        if (*entrada == '\0') {
+            info_demilitadores.atomo = EOS;
+            return info_demilitadores;
+        }
+        
+        entrada++;
+    }
+
+    info_demilitadores.linha = contalinhas;
+    //Chegando aqui estou com um caracter que precisa ser analisado
+    return info_demilitadores; // Já saiu dos caracteres delimitadores
+}
+
 TInfoAtomo reconhece_Tabela_ASCII() {
     TInfoAtomo info_tabela_ascii;
     info_tabela_ascii.atomo = ERRO;  
@@ -113,11 +135,13 @@ TInfoAtomo reconhece_Tabela_ASCII() {
     char temp[10];  
     int i = 0;
 
-    if (*entrada == '\'') {  
+    if (*entrada == '\''){  
         entrada++;  
 
         while (isdigit(*entrada)) {  
-            temp[i++] = *entrada++;  
+           // temp[i++] = *entrada++;
+           temp[i++] = *entrada;
+           entrada++;  
         }
 
         temp[i] = '\0';
@@ -126,6 +150,7 @@ TInfoAtomo reconhece_Tabela_ASCII() {
         if (*entrada == '\'') {  
             entrada++; 
             info_tabela_ascii.atomo = TABELA_ASCII;
+            info_tabela_ascii.linha = contalinhas;
             Apresentar_Atomo(info_tabela_ascii, "NAO PRECISA DE MENSAGEM");
         }
     }
@@ -169,6 +194,7 @@ TInfoAtomo reconhece_Hexadecimal() {
 
         info_hexadecimal.atomo = HEXADECIMAL;
         info_hexadecimal.atributo_numero = resultado;
+        info_hexadecimal.linha = contalinhas++;
         
         Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
         return info_hexadecimal;
@@ -244,24 +270,7 @@ TInfoAtomo reconhece_Operando(){
     return info_operador;    
 }
 
-TInfoAtomo CaracteresDemilitadores(){
-    TInfoAtomo info_demilitadores;
-    info_demilitadores.atomo = ERRO;
 
-    while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
-        if (*entrada == '\n') {
-            contalinhas++;
-        }
-        if (*entrada == '\0') {
-            info_demilitadores.atomo = EOS;
-            return info_demilitadores;
-        }
-        entrada++;
-    }
-    info_demilitadores.linha = contalinhas;
-    //Chegando aqui estou com um caracter que precisa ser analisado
-    return info_demilitadores; // Já saiu dos caracteres delimitadores
-}
 
 TInfoAtomo reconhecer_parentes(){
     TInfoAtomo info_parentes;
@@ -291,7 +300,6 @@ TInfoAtomo reconhecer_chaves(){
         info_chaves.atomo = FECHA_CHAVE;
     }
 
-    
     return info_chaves;
 }
 
@@ -310,6 +318,7 @@ TInfoAtomo reconhece_ponto_virgula(){
     Apresentar_Atomo(info_pontoVirgula, "MENSAGEM NAO NECESSARIA");
     return info_pontoVirgula;
 }
+
 
 TInfoAtomo reconhece_comentario() {
     TInfoAtomo info_comentario;
@@ -449,7 +458,7 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
         printf("\n%03d# %s | %s", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_ID);
 
     if(info_atomo.atomo == NUMERO)
-        printf("\n%03d# %s | %f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
+        printf("\n%03d# %s | %.2f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
 
     if(info_atomo.atomo == COMENTARIO)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
