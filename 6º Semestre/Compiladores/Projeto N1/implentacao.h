@@ -107,57 +107,41 @@ TInfoAtomo obter_atomo() {
 TInfoAtomo reconhece_Hexadecimal() {
     TInfoAtomo info_hexadecimal;
     info_hexadecimal.atomo = ERRO;
-    int quantidade = 0;
-    int conversao_decimal = 0;
+    info_hexadecimal.atributo_numero = 0;
 
-    if (*entrada == '0' && *(entrada + 1) == 'x') { // Reconhece HEXA
+    int quantidade = 0;
+    int resultado = 0;
+    
+    if (*entrada == '0' && *(entrada + 1) == 'x') { 
         entrada += 2;
-        while (isdigit(*entrada) || *entrada == 'A' || *entrada == 'B' 
-                || *entrada == 'C' || *entrada == 'D' ||
-                *entrada == 'E' || *entrada == 'F'){
+
+        while (isdigit(*entrada) || (*entrada >= 'A' && *entrada <= 'F')) {
             entrada++;
             quantidade++;
         }
-
-        printf("\n\n%d\n\n", quantidade);
-
-        entrada -= quantidade;
-
-        while (isdigit(*entrada) || isalpha(*entrada)) {
-            if (*entrada == 'A') {
-                conversao_decimal = 10 * pow(16, quantidade);
-                quantidade--;
-            } else if (*entrada == 'B') {
-                conversao_decimal = 11 * pow(16, quantidade);
-                quantidade--;
-            } else if (*entrada == 'C') {
-                conversao_decimal = 12 * pow(16, quantidade);
-                quantidade--;
-            } else if (*entrada == 'D') {
-                conversao_decimal = 13 * pow(16, quantidade);
-                quantidade--;
-            } else if (*entrada == 'E') {
-                conversao_decimal = 14 * pow(16, quantidade);
-                quantidade--;
-            } else if (*entrada == 'F') {
-                conversao_decimal = 15 * pow(16, quantidade);
-                quantidade--;
+        entrada -= quantidade; 
+        int expoente = quantidade - 1;
+        
+        for (int i = 0; i < quantidade; i++) {
+            int valor;
+            if (*entrada >= 'A' && *entrada <= 'F') {
+                valor = (*entrada - 'A' + 10);
             } else {
-                conversao_decimal = (*entrada - '0') * pow(16, quantidade);
-                quantidade--;
+                valor = (*entrada - '0');
             }
+
+            resultado += valor * pow(16, expoente);
+            expoente--;
             entrada++;
-            
-            if (quantidade == 0){
-            info_hexadecimal.atomo = HEXADECIMAL;
-            info_hexadecimal.atributo_numero = conversao_decimal;
-
-            Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
-            return info_hexadecimal;
-            }
         }
-    }
 
+        info_hexadecimal.atomo = HEXADECIMAL;
+        info_hexadecimal.atributo_numero = resultado;
+        
+        Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
+        return info_hexadecimal;
+    }
+    
     Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
     return info_hexadecimal;
 }
@@ -520,50 +504,5 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == HEXADECIMAL)
-    printf("\n%03d# %s | %f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
+    printf("\n%03d# %s | %.2f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
 }
-
-
-
-
-    // // PRECISO VOLTAR AO PONTO INICIAL DO HEXA;
-    // entrada -= quantidade;
-
-    // while (isdigit(*entrada) || *entrada == 'A' || *entrada == 'B' 
-    //        || *entrada == 'C' || *entrada == 'D' || *entrada == 'E') {
-    //     if (*entrada == 'A') {
-    //         entrada++;
-    //         resultado += 10 * quantidade;
-    //         quantidade--;
-    //     } else if (*entrada == 'A') {
-    //         entrada++;
-    //         resultado = 11 * quantidade;
-    //         quantidade--;
-    //     } else if (*entrada == 'B') {
-    //         entrada++;
-    //         resultado = 12 * quantidade;
-    //         quantidade--;
-    //     } else if (*entrada == 'C') {
-    //         entrada++;
-    //         resultado = 13 * quantidade;
-    //         quantidade--;
-    //     } else if (*entrada == 'D') {
-    //         entrada++;
-    //         resultado = 14 * quantidade;
-    //         quantidade--;
-    //     } else if (*entrada == 'E') {
-    //         entrada++;
-    //         resultado = 15 * quantidade;
-    //         quantidade--;
-    //     } else if (isdigit(*entrada)) {
-    //         entrada++;
-    //         resultado += (*entrada - '0') * quantidade;
-    //         quantidade--;
-    //     }
-    //     info_hexadecimal.atributo_numero = resultado;
-    //     info_hexadecimal.atomo = HEXADECIMAL;
-
-    //     Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
-    //     return info_hexadecimal;
-    // }
-   
