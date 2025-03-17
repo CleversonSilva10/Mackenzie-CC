@@ -1,5 +1,5 @@
 int main(void){
    int _num; 
-   _num =   0xFF; 
+   _num =   0xFF '65'; 
    printf(_num);//teste
 }

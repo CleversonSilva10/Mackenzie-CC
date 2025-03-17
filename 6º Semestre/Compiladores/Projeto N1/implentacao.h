@@ -41,6 +41,11 @@ TInfoAtomo obter_atomo() {
 
     info_atomo = CaracteresDemilitadores();
 
+    if(*entrada == '\''){
+        info_atomo = reconhece_Tabela_ASCII();
+        return info_atomo;
+    }
+
     if (*entrada == '/') {
         info_atomo = reconhece_comentario();
         // *entrada == '/' DIVISAO
@@ -99,6 +104,33 @@ TInfoAtomo obter_atomo() {
     }
 
     return info_atomo; // ATOMO ERRO
+}
+
+TInfoAtomo reconhece_Tabela_ASCII() {
+    TInfoAtomo info_tabela_ascii;
+    info_tabela_ascii.atomo = ERRO;  
+
+    char temp[10];  
+    int i = 0;
+
+    if (*entrada == '\'') {  
+        entrada++;  
+
+        while (isdigit(*entrada)) {  
+            temp[i++] = *entrada++;  
+        }
+
+        temp[i] = '\0';
+        info_tabela_ascii.Num_Tabela_ASCII = atoi(temp);  
+
+        if (*entrada == '\'') {  
+            entrada++; 
+            info_tabela_ascii.atomo = TABELA_ASCII;
+            Apresentar_Atomo(info_tabela_ascii, "NAO PRECISA DE MENSAGEM");
+        }
+    }
+
+    return info_tabela_ascii;
 }
 
 // hexa → A|B|C|D|E|F
@@ -505,4 +537,7 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
 
     if(info_atomo.atomo == HEXADECIMAL)
     printf("\n%03d# %s | %.2f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
+
+    if(info_atomo.atomo == TABELA_ASCII)
+    printf("\n%03d# %s | %c", info_atomo.linha, strAtomo[info_atomo.atomo], (char)info_atomo.Num_Tabela_ASCII);
 }

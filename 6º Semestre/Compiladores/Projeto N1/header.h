@@ -40,7 +40,8 @@ char *strAtomo[] = {
     "OPERADOR_SUBTRACAO",
     "OPERADOR_MULTIPLICACAO",
     "OPERADOR_DIVISAO",
-    "HEXADECIMAL"
+    "HEXADECIMAL",
+    "TABELA_ASCII"
 };
 
 typedef enum{
@@ -76,13 +77,15 @@ typedef enum{
     OPERADOR_SUBTRACAO,
     OPERADOR_MULTIPLICACAO,
     OPERADOR_DIVISAO,
-    HEXADECIMAL
+    HEXADECIMAL,
+    TABELA_ASCII
 }TAtomo;
 
 typedef struct{
     TAtomo atomo;
     int linha;
     float atributo_numero;
+    char Num_Tabela_ASCII;
     char atributo_ID[16];
     int quantidade_caracteres;
 }TInfoAtomo;
@@ -99,3 +102,4 @@ TInfoAtomo reconhece_ponto_virgula();
 TInfoAtomo reconhecer_chaves();
 TInfoAtomo reconhece_Operando();
 TInfoAtomo reconhece_Hexadecimal();
+TInfoAtomo reconhece_Tabela_ASCII();
