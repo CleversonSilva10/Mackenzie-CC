@@ -9,7 +9,9 @@ int main(){
     Aluno();
     TInfoAtomo info_atomo;
 
-    entrada = ler_arquivo("arquivo_teste12.txt");
+    //TESTE B
+
+    entrada = ler_arquivo("Arquivos de Teste/Arquivo_B.txt");
     printf("\nIniciando leitura do arquivo...\n");
 
     do{

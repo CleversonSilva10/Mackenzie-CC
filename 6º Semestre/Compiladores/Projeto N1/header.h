@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 void Aluno();
 //extern char *entrada;
@@ -38,7 +39,8 @@ char *strAtomo[] = {
     "OPERADOR_SOMA",
     "OPERADOR_SUBTRACAO",
     "OPERADOR_MULTIPLICACAO",
-    "OPERADOR_DIVISAO"
+    "OPERADOR_DIVISAO",
+    "HEXADECIMAL"
 };
 
 typedef enum{
@@ -73,7 +75,8 @@ typedef enum{
     OPERADOR_SOMA,
     OPERADOR_SUBTRACAO,
     OPERADOR_MULTIPLICACAO,
-    OPERADOR_DIVISAO
+    OPERADOR_DIVISAO,
+    HEXADECIMAL
 }TAtomo;
 
 typedef struct{
@@ -95,4 +98,4 @@ TInfoAtomo reconhecer_parentes();
 TInfoAtomo reconhece_ponto_virgula();
 TInfoAtomo reconhecer_chaves();
 TInfoAtomo reconhece_Operando();
-
+TInfoAtomo reconhece_Hexadecimal();

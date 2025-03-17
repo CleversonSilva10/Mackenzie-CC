@@ -1,0 +1,13 @@
+
+int main(void){
+ int _maior,_N1,_n2;
+
+ scanf(_n1);
+
+ 
+ 
+ if( _n1 > _n2  && (_n1 < _NNNNn3 )) 
+    _maior = _n1;
+
+ printf(_maior); // imprime o maior valor
+}
