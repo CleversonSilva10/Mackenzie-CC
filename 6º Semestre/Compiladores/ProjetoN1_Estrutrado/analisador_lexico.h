@@ -1,13 +1,5 @@
 #include "header.h"
 
-
-
-void Aluno(){
-    printf("\n----------------------------------------\n");
-    printf("Nome: Cleverson Pereira da Silva - RA: 10391119\n");
-    printf("-------------------------------------------\n");
-}
-
 char *ler_arquivo(const char *nome_arquivo) {
     FILE *arquivo = fopen(nome_arquivo, "r"); // Abre o arquivo para leitura
     if (!arquivo) {

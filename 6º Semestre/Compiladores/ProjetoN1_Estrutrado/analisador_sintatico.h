@@ -1,9 +1,11 @@
-#include <header.h>
+#include "analisador_lexico.h"
 
-void consome( TAtomo atomo ){
+void consome(TAtomo atomo ){
     if( lookahead == atomo ){
         info_atomo = obter_atomo();
         lookahead = info_atomo.atomo;
+    }else if(info_atomo.atomo == EOS){
+        printf("Nenhum erro sintatico");
     }
     else{
         printf("\nErro sintatico: esperado [%s] encontrado [%s]\n",strAtomo[atomo],strAtomo[lookahead]);

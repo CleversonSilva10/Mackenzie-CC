@@ -4,11 +4,18 @@
 #include <string.h>
 #include <math.h>
 
+void Aluno(){
+    printf("\n----------------------------------------\n");
+    printf("Nome: Cleverson Pereira da Silva - RA: 10391119\n");
+    printf("-------------------------------------------\n");
+}
+
 char *entrada;
 int contalinhas = 1;
 
-TAtomo lookahead;
 TInfoAtomo info_atomo;
+TAtomo lookahead;
+
 
 //extern char *entrada;
 
