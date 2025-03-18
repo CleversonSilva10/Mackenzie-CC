@@ -22,17 +22,12 @@ void program(){
 
 void compound_stmt() {
     consome(ABRE_CHAVE);
-    while (lookahead != FECHA_CHAVE){
-        var_decl_list();
+    if(lookahead == INT || lookahead == CHAR){
+        var_decl();
         stmt();
-    }
-
-    if(lookahead == FECHA_CHAVE){
         consome(FECHA_CHAVE);
-    }else{
-        printf("ERRO SINTATICO, ESPERAVA: FECHA CHAVE");
     }
-    
+    consome(FECHA_CHAVE);
 }
 
 void var_decl() {
@@ -106,16 +101,15 @@ void assig_stmt() {
 }
 
 void cond_stmt() {
-    if(lookahead == IF){
-        consome(IF);
-        consome(ABRE_PAR);
-        expr();
-        consome(FECHA_CHAVE);
-        stmt();
-    }else{
+    consome(IF);
+    consome(ABRE_PAR);
+    expr();
+    consome(FECHA_CHAVE);
+    stmt();
+    
+    if(lookahead == ELSE){
         stmt();
     }
-
 }
 
 void while_stmt() {
