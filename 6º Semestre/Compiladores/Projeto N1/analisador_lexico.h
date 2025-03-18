@@ -210,9 +210,12 @@ TInfoAtomo reconhece_Operando(){
     info_operador.atomo = ERRO;
 
     if (*entrada == '=') {
-        entrada++;
-        info_operador.atomo = ATRIBUICAO;
-    } 
+        if (*(entrada + 1) == '='){
+            entrada += 2;
+            info_operador.atomo = OPERADOR_COMPARACAO_IGUAL;
+        }
+    }
+
     else if (*entrada == '|') {
         if (*(entrada + 1) == '|'){
             entrada += 2;
@@ -511,6 +514,9 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == ATRIBUICAO)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+    
+    if(info_atomo.atomo == OPERADOR_COMPARACAO_IGUAL)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
     if(info_atomo.atomo == OPERADOR_COMPARACAO_OR)
