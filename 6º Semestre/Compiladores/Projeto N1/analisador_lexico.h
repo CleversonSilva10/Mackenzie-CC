@@ -1,7 +1,6 @@
 #include "header.h"
 
-char *entrada;
-int contalinhas = 1;
+
 
 void Aluno(){
     printf("\n----------------------------------------\n");

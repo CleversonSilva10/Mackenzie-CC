@@ -4,6 +4,11 @@
 #include <string.h>
 #include <math.h>
 
+char *entrada;
+int contalinhas = 1;
+
+TAtomo lookahead;
+TInfoAtomo info_atomo;
 
 //extern char *entrada;
 
@@ -104,3 +109,21 @@ TInfoAtomo reconhecer_chaves();
 TInfoAtomo reconhece_Operando();
 TInfoAtomo reconhece_Hexadecimal();
 TInfoAtomo reconhece_Tabela_ASCII();
+
+void consome(TAtomo atomo);
+void compound_stmt();
+void var_decl();
+void type_specifier();
+void var_decl_list();
+void variable_id();
+void stmt();
+void assig_stmt();
+void cond_stmt();
+void while_stmt();
+void expr();
+void conjunction();
+void comparison();
+void relation();
+void sum();
+void term();
+void factor();
