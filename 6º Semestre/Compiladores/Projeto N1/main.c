@@ -336,58 +336,49 @@ TInfoAtomo reconhece_Operando() {
     TInfoAtomo info_operador;
     info_operador.atomo = ERRO;
 
-    if (*entrada == '=') {
-        if (*(entrada + 1) == '=') {
-            entrada += 2;
-            info_operador.atomo = OPERADOR_COMPARACAO_IGUAL;
-        }
-        if (*(entrada + 1) != '=') {
-            entrada++;
-            info_operador.atomo = ATRIBUICAO;
-        }
+    if (*entrada == '=' && *(entrada+1) != '=') {
+        entrada++;
+        info_operador.atomo = ATRIBUICAO;
     }
 
-    if (*entrada == '|') {
-        if (*(entrada + 1) == '|') {
-            entrada += 2;
-            info_operador.atomo = OPERADOR_COMPARACAO_OR;
-        }
+    if(*entrada == '=' && *(entrada+1) == '='){
+        entrada += 2;
+        info_operador.atomo = OPERADOR_COMPARACAO_IGUAL;
+    }
+
+    if(*entrada == '|' && *(entrada+1) == '|'){
+        entrada += 2;
+        info_operador.atomo = OPERADOR_COMPARACAO_OR;
+    }
+
+    if(*entrada == '&' && *(entrada+1) == '&'){
+        entrada += 2;
+        info_operador.atomo = OPERADOR_COMPARACAO_AND;
+    }
+
+    if(*entrada == '!' && *(entrada+1) == '='){
+        entrada += 2;
+        info_operador.atomo = OPERADOR_COMPARACAO_DIFERENTE;
+    }
+
+    if(*entrada == '<' && *(entrada+1) == '='){
+        entrada += 2;
+        info_operador.atomo = OPERADOR_COMPARACAO_MENOR_IGUAL;
     }
     
-    if (*entrada == '&') {
-        if (*(entrada + 1) == '&') {
-            entrada += 2;
-            info_operador.atomo = OPERADOR_COMPARACAO_AND;
-        }
+    if(*entrada == '<' && *(entrada+1) != '='){
+        entrada++;
+        info_operador.atomo = OPERADOR_COMPARACAO_MENOR;
+    }
+
+    if(*entrada == '>' && *(entrada+1) == '='){
+        entrada += 2;
+        info_operador.atomo = OPERADOR_COMPARACAO_MAIOR_IGUAL;
     }
     
-    if (*entrada == '<') {
-        if (*(entrada + 1) == '=') {
-            entrada += 2;
-            info_operador.atomo = OPERADOR_COMPARACAO_MENOR_IGUAL;
-        }
-        if (*(entrada + 1) != '=') {
-            entrada++;
-            info_operador.atomo = OPERADOR_COMPARACAO_MENOR;
-        }
-    }
-    
-    if (*entrada == '>') {
-        if (*(entrada + 1) == '=') {
-            entrada += 2;
-            info_operador.atomo = OPERADOR_COMPARACAO_MAIOR_IGUAL;
-        }
-        if (*(entrada + 1) != '=') {
-            entrada++;
-            info_operador.atomo = OPERADOR_COMPARACAO_MAIOR;
-        }
-    }
-    
-    if (*entrada == '!') {
-        if (*(entrada + 1) == '=') {
-            entrada += 2;
-            info_operador.atomo = OPERADOR_COMPARACAO_DIFERENTE;
-        }
+    if(*entrada == '>' && *(entrada+1) != '='){
+        entrada++;
+        info_operador.atomo = OPERADOR_COMPARACAO_MAIOR;
     }
 
     if (*entrada == '+') {
@@ -428,27 +419,26 @@ TInfoAtomo reconhecer_parentes(){
         entrada++;
         info_parentes.atomo = FECHA_PAR;
     }
-
     info_parentes.linha = contalinhas;
     Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
     return info_parentes;
 }
 
 TInfoAtomo reconhecer_chaves(){
-    TInfoAtomo info_parentes;
-    info_parentes.atomo = ERRO;
+    TInfoAtomo info_chaves;
+    info_chaves.atomo = ERRO;
 
     if(*entrada == '{'){
         entrada++;
-        info_parentes.atomo = ABRE_CHAVE;
+        info_chaves.atomo = ABRE_CHAVE;
     }else{
         entrada++;
-        info_parentes.atomo = FECHA_CHAVE;
+        info_chaves.atomo = FECHA_CHAVE;
     }
 
-    info_parentes.linha = contalinhas;
-    Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
-    return info_parentes;
+    info_chaves.linha = contalinhas;
+    Apresentar_Atomo(info_chaves, "MENSAGEM NAO NECESSARIA");
+    return info_chaves;
 }
 
 TInfoAtomo reconhece_ponto_virgula(){
@@ -934,7 +924,7 @@ int main(){
     Aluno();
 
     printf("\nIniciando leitura do arquivo...\n");
-    entrada = ler_arquivo("Arquivos de Teste/Arquivo_A.txt");
+    entrada = ler_arquivo("Arquivos de Teste/Arquivo_E.txt");
 
     info_atomo = obter_atomo();
 
