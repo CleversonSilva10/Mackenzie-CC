@@ -4,8 +4,6 @@
 #include <string.h>
 #include <math.h>
 
-TInfoAtomo info_atomo;
-TAtomo lookahead;
 
 void Aluno(){
     printf("\n----------------------------------------\n");
@@ -103,6 +101,9 @@ typedef struct{
     int quantidade_caracteres;
 }TInfoAtomo;
 
+TInfoAtomo info_atomo;
+TAtomo lookahead;
+
 char *ler_arquivo(const char *nome_arquivo);
 void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem);
 void Aluno();
@@ -136,8 +137,6 @@ void sum();
 void term();
 void factor();
 
-
-
 char *ler_arquivo(const char *nome_arquivo) {
     FILE *arquivo = fopen(nome_arquivo, "r"); // Abre o arquivo para leitura
     if (!arquivo) {
@@ -164,7 +163,7 @@ char *ler_arquivo(const char *nome_arquivo) {
 }
 
 TInfoAtomo obter_atomo() {
-    // TInfoAtomo info_atomo;
+    TInfoAtomo info_atomo;
     info_atomo.atomo = ERRO;
 
     info_atomo = CaracteresDemilitadores();
@@ -907,8 +906,8 @@ int main(){
     printf("\nIniciando leitura do arquivo...\n");
     entrada = ler_arquivo("Arquivos de Teste/Arquivo_A.txt");
 
-    // info_atomo = obterAtomo();    
-    // lookahead = info_atomo.atomo;
+    info_atomo = obter_atomo();
+    lookahead = info_atomo.atomo;
 
     program();
 

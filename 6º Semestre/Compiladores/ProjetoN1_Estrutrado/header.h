@@ -13,10 +13,6 @@ void Aluno(){
 char *entrada;
 int contalinhas = 1;
 
-TInfoAtomo info_atomo;
-TAtomo lookahead;
-
-
 //extern char *entrada;
 
 char *strAtomo[] = {
@@ -103,6 +99,9 @@ typedef struct{
     char atributo_ID[16];
     int quantidade_caracteres;
 }TInfoAtomo;
+
+TInfoAtomo info_atomo;
+TAtomo lookahead;
 
 char *ler_arquivo(const char *nome_arquivo);
 void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem);

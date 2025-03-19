@@ -3,6 +3,7 @@
         "type_traits": "cpp",
         "analisador_lexico.h": "c",
         "analisador_sintatico.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "header.h": "c"
     }
 }
