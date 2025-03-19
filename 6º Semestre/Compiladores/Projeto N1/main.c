@@ -4,7 +4,6 @@
 #include <string.h>
 #include <math.h>
 
-
 void Aluno(){
     printf("\n----------------------------------------\n");
     printf("Nome: Cleverson Pereira da Silva - RA: 10391119\n");
@@ -50,8 +49,8 @@ char *strAtomo[] = {
     "OPERADOR_SUBTRACAO",
     "OPERADOR_MULTIPLICACAO",
     "OPERADOR_DIVISAO",
-    "HEXADECIMAL",
-    "TABELA_ASCII"
+    "INTCONST",
+    "CHARCONST"
 };
 
 typedef enum{
@@ -88,8 +87,8 @@ typedef enum{
     OPERADOR_SUBTRACAO,
     OPERADOR_MULTIPLICACAO,
     OPERADOR_DIVISAO,
-    HEXADECIMAL,
-    TABELA_ASCII
+    INTCONST,
+    CHARCONST
 }TAtomo;
 
 typedef struct{
@@ -116,8 +115,8 @@ TInfoAtomo reconhecer_parentes();
 TInfoAtomo reconhece_ponto_virgula();
 TInfoAtomo reconhecer_chaves();
 TInfoAtomo reconhece_Operando();
-TInfoAtomo reconhece_Hexadecimal();
-TInfoAtomo reconhece_Tabela_ASCII();
+TInfoAtomo reconhece_intconst();
+TInfoAtomo reconhece_charconst();
 
 void consome(TAtomo atomo);
 void compound_stmt();
@@ -166,21 +165,25 @@ TInfoAtomo obter_atomo() {
     TInfoAtomo info_atomo;
     info_atomo.atomo = ERRO;
 
-    info_atomo = CaracteresDemilitadores();
-
-    if(*entrada == '\''){
-        info_atomo = reconhece_Tabela_ASCII();
+    if (*entrada == '\0') {
+        info_atomo.atomo = EOS;
         return info_atomo;
     }
 
-    if (*entrada == '/') {
+    info_atomo = CaracteresDemilitadores();
+
+    if(*entrada == '\''){
+        info_atomo = reconhece_charconst();
+        return info_atomo;
+    }
+
+    if ((*entrada == '/' && *(entrada+1) == '/') || (*entrada == '/' && *(entrada+1) == '*')) {
         info_atomo = reconhece_comentario();
-        // *entrada == '/' DIVISAO
         return info_atomo;
     }
 
     if (*entrada == '0' && *(entrada+1) == 'x') {
-        info_atomo = reconhece_Hexadecimal();
+        info_atomo = reconhece_intconst();
         return info_atomo;
     }
 
@@ -189,6 +192,7 @@ TInfoAtomo obter_atomo() {
         return info_atomo;
     }
 
+    // Operação de Comparação 
     if  ((*entrada == '|' && *(entrada+1) == '|') || (*entrada == '&' && *(entrada+1) == '&') || 
         (*entrada == '=' && *(entrada+1) == '=') || (*entrada == '!' && *(entrada+1) == '=')){
         info_atomo = reconhece_Operando();
@@ -200,7 +204,8 @@ TInfoAtomo obter_atomo() {
             return info_atomo;
         }
 
-    if ((*entrada == '+') || (*entrada == '-') || (*entrada == '*') || (*entrada == '/' && *(entrada+1) != '/')){
+    // Operação Aritimetica
+    if ((*entrada == '+') || (*entrada == '-') || (*entrada == '*') || (*entrada == '/')){
         info_atomo = reconhece_Operando();
         return info_atomo;
     }
@@ -240,13 +245,7 @@ TInfoAtomo CaracteresDemilitadores(){
     while (*entrada == ' ' || *entrada == '\n' || *entrada == '\r' || *entrada == '\t') {
         if (*entrada == '\n') {
             contalinhas++;
-        }
-
-        if (*entrada == '\0') {
-            info_demilitadores.atomo = EOS;
-            return info_demilitadores;
-        }
-        
+        }        
         entrada++;
     }
 
@@ -255,9 +254,9 @@ TInfoAtomo CaracteresDemilitadores(){
     return info_demilitadores; // Já saiu dos caracteres delimitadores
 }
 
-TInfoAtomo reconhece_Tabela_ASCII() {
-    TInfoAtomo info_tabela_ascii;
-    info_tabela_ascii.atomo = ERRO;  
+TInfoAtomo reconhece_charconst() {
+    TInfoAtomo info_charconst;
+    info_charconst.atomo = ERRO;  
 
     char temp[10];  
     int i = 0;
@@ -272,26 +271,26 @@ TInfoAtomo reconhece_Tabela_ASCII() {
         }
 
         temp[i] = '\0';
-        info_tabela_ascii.Num_Tabela_ASCII = atoi(temp);  
+        info_charconst.Num_Tabela_ASCII = atoi(temp);  
 
         if (*entrada == '\'') {  
             entrada++; 
-            info_tabela_ascii.atomo = TABELA_ASCII;
-            info_tabela_ascii.linha = contalinhas;
-            Apresentar_Atomo(info_tabela_ascii, "NAO PRECISA DE MENSAGEM");
+            info_charconst.atomo = CHARCONST;
+            info_charconst.linha = contalinhas;
+            Apresentar_Atomo(info_charconst, "NAO PRECISA DE MENSAGEM");
         }
     }
 
-    return info_tabela_ascii;
+    return info_charconst;
 }
 
 // hexa → A|B|C|D|E|F
 // intconst → 0x(hexa|digito)+
 
-TInfoAtomo reconhece_Hexadecimal() {
-    TInfoAtomo info_hexadecimal;
-    info_hexadecimal.atomo = ERRO;
-    info_hexadecimal.atributo_numero = 0;
+TInfoAtomo reconhece_intconst() {
+    TInfoAtomo info_intconst;
+    info_intconst.atomo = ERRO;
+    info_intconst.atributo_numero = 0;
 
     int quantidade = 0;
     int resultado = 0;
@@ -319,85 +318,101 @@ TInfoAtomo reconhece_Hexadecimal() {
             entrada++;
         }
 
-        info_hexadecimal.atomo = HEXADECIMAL;
-        info_hexadecimal.atributo_numero = resultado;
-        info_hexadecimal.linha = contalinhas++;
+        info_intconst.atomo = INTCONST;
+        info_intconst.atributo_numero = resultado;
+        info_intconst.linha = contalinhas++;
         
-        Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
-        return info_hexadecimal;
+        Apresentar_Atomo(info_intconst, "");
+        return info_intconst;
     }
     
-    Apresentar_Atomo(info_hexadecimal, "NAO PRECISA DE MENSAGEM");
-    return info_hexadecimal;
+    Apresentar_Atomo(info_intconst, "");
+    return info_intconst;
 }
 
 
 
-TInfoAtomo reconhece_Operando(){
+TInfoAtomo reconhece_Operando() {
     TInfoAtomo info_operador;
     info_operador.atomo = ERRO;
 
     if (*entrada == '=') {
-        if (*(entrada + 1) == '='){
+        if (*(entrada + 1) == '=') {
             entrada += 2;
             info_operador.atomo = OPERADOR_COMPARACAO_IGUAL;
         }
+        if (*(entrada + 1) != '=') {
+            entrada++;
+            info_operador.atomo = ATRIBUICAO;
+        }
     }
 
-    else if (*entrada == '|') {
-        if (*(entrada + 1) == '|'){
+    if (*entrada == '|') {
+        if (*(entrada + 1) == '|') {
             entrada += 2;
             info_operador.atomo = OPERADOR_COMPARACAO_OR;
         }
-    } 
-    else if (*entrada == '&') {
+    }
+    
+    if (*entrada == '&') {
         if (*(entrada + 1) == '&') {
             entrada += 2;
             info_operador.atomo = OPERADOR_COMPARACAO_AND;
         }
-    } 
-    else if (*entrada == '<') {
+    }
+    
+    if (*entrada == '<') {
         if (*(entrada + 1) == '=') {
             entrada += 2;
             info_operador.atomo = OPERADOR_COMPARACAO_MENOR_IGUAL;
-        } else {
+        }
+        if (*(entrada + 1) != '=') {
             entrada++;
             info_operador.atomo = OPERADOR_COMPARACAO_MENOR;
         }
-    } 
-    else if (*entrada == '>') {
+    }
+    
+    if (*entrada == '>') {
         if (*(entrada + 1) == '=') {
             entrada += 2;
             info_operador.atomo = OPERADOR_COMPARACAO_MAIOR_IGUAL;
-        } else {
+        }
+        if (*(entrada + 1) != '=') {
             entrada++;
             info_operador.atomo = OPERADOR_COMPARACAO_MAIOR;
         }
-    } 
-    else if (*entrada == '!') {
+    }
+    
+    if (*entrada == '!') {
         if (*(entrada + 1) == '=') {
             entrada += 2;
             info_operador.atomo = OPERADOR_COMPARACAO_DIFERENTE;
         }
-    }else if (*entrada == '+') {
+    }
+
+    if (*entrada == '+') {
         entrada++;
         info_operador.atomo = OPERADOR_SOMA;
-    } 
-    else if (*entrada == '-') {
+    }
+    
+    if (*entrada == '-') {
         entrada++;
         info_operador.atomo = OPERADOR_SUBTRACAO;
-    } 
-    else if (*entrada == '*') {
+    }
+    
+    if (*entrada == '*') {
         entrada++;
         info_operador.atomo = OPERADOR_MULTIPLICACAO;
-    } 
-    else if (*entrada == '/') {
+    }
+    
+    if (*entrada == '/') {
         entrada++;
         info_operador.atomo = OPERADOR_DIVISAO;
     }
 
-    Apresentar_Atomo(info_operador, "MENSAGEM NAO NECESSARIA");
-    return info_operador;    
+    info_operador.linha = contalinhas;
+    Apresentar_Atomo(info_operador, "");
+    return info_operador;
 }
 
 
@@ -414,23 +429,26 @@ TInfoAtomo reconhecer_parentes(){
         info_parentes.atomo = FECHA_PAR;
     }
 
+    info_parentes.linha = contalinhas;
     Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
     return info_parentes;
 }
 
 TInfoAtomo reconhecer_chaves(){
-    TInfoAtomo info_chaves;
-    info_chaves.atomo = ERRO;
+    TInfoAtomo info_parentes;
+    info_parentes.atomo = ERRO;
 
     if(*entrada == '{'){
         entrada++;
-        info_chaves.atomo = ABRE_CHAVE;
+        info_parentes.atomo = ABRE_CHAVE;
     }else{
         entrada++;
-        info_chaves.atomo = FECHA_CHAVE;
+        info_parentes.atomo = FECHA_CHAVE;
     }
 
-    return info_chaves;
+    info_parentes.linha = contalinhas;
+    Apresentar_Atomo(info_parentes, "MENSAGEM NAO NECESSARIA");
+    return info_parentes;
 }
 
 TInfoAtomo reconhece_ponto_virgula(){
@@ -438,14 +456,14 @@ TInfoAtomo reconhece_ponto_virgula(){
     info_pontoVirgula.atomo = ERRO;
 
     if (*entrada == ';'){
-        entrada++;
         info_pontoVirgula.atomo = PONTO_VIRGULA;
     }else if (*entrada == ','){
-        entrada++;
         info_pontoVirgula.atomo = VIRGULA;
     }
 
-    Apresentar_Atomo(info_pontoVirgula, "MENSAGEM NAO NECESSARIA");
+    info_pontoVirgula.linha = contalinhas;
+    entrada++;
+    Apresentar_Atomo(info_pontoVirgula, "");
     return info_pontoVirgula;
 }
 
@@ -469,8 +487,6 @@ TInfoAtomo reconhece_comentario() {
 
              // Para sair da linha de comentário
             info_comentario.linha = contalinhas;
-            info_comentario.atomo = COMENTARIO;
-            Apresentar_Atomo(info_comentario, "MENSAGEM NAO NECESSARIA");
             return info_comentario;
         }
 
@@ -486,13 +502,9 @@ TInfoAtomo reconhece_comentario() {
             }
             entrada += 2; // Sair da área de comentários
             info_comentario.linha = contalinhas;
-            info_comentario.atomo = COMENTARIO;
-            Apresentar_Atomo(info_comentario, "MENSAGEM NAO NECESSARIA");
             return info_comentario;
         }
     }
-
-    Apresentar_Atomo(info_comentario, "COMENTARIO INVALIDO");
     return info_comentario;
 }
 
@@ -668,6 +680,9 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     if(info_atomo.atomo == OPERADOR_COMPARACAO_DIFERENTE)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
+    if(info_atomo.atomo == OPERADOR_SOMA)
+    printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
+
     if(info_atomo.atomo == OPERADOR_SUBTRACAO)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
@@ -677,24 +692,26 @@ void Apresentar_Atomo(TInfoAtomo info_atomo, const char *mensagem){
     if(info_atomo.atomo == OPERADOR_DIVISAO)
     printf("\n%03d# %s", info_atomo.linha, strAtomo[info_atomo.atomo]);
 
-    if(info_atomo.atomo == HEXADECIMAL)
+    if(info_atomo.atomo == INTCONST)
     printf("\n%03d# %s | %.2f", info_atomo.linha, strAtomo[info_atomo.atomo], info_atomo.atributo_numero);
 
-    if(info_atomo.atomo == TABELA_ASCII)
+    if(info_atomo.atomo == CHARCONST)
     printf("\n%03d# %s | %c", info_atomo.linha, strAtomo[info_atomo.atomo], (char)info_atomo.Num_Tabela_ASCII);
 }
 
 void consome(TAtomo atomo){
-    if( lookahead == atomo ){
-        info_atomo = obter_atomo();
-        lookahead = info_atomo.atomo;
-    }else{
-        printf("\nErro sintatico: esperado [%s] encontrado [%s]\n",strAtomo[atomo],strAtomo[lookahead]);
-        exit(1);
-    }
+    // printf("\nconsome atomo: %s - PONTEIRO: %c\n", strAtomo[info_atomo.atomo], *entrada);
+    // if( lookahead == atomo ){
+    //     info_atomo = obter_atomo();
+    //     lookahead = info_atomo.atomo;
+    // }else{
+    //     printf("\nErro sintatico: esperado [%s] encontrado [%s]\n",strAtomo[atomo], strAtomo[lookahead]);
+    //     exit(1);
+    // }
 }
 
 void program(){
+    printf("\nENTREI - <program>");
     consome(VOID);
     consome(MAIN);
     consome(ABRE_PAR);
@@ -704,6 +721,7 @@ void program(){
 }
 
 void compound_stmt() {
+    printf("\nENTREI - <compound_stmt>");
     consome(ABRE_CHAVE);
     if(lookahead == INT || lookahead == CHAR){
         var_decl();
@@ -714,12 +732,14 @@ void compound_stmt() {
 }
 
 void var_decl() {
+    printf("\nENTREI - <var_decl>");
     type_specifier();
     var_decl_list();
     consome(PONTO_VIRGULA);
 }
 
 void type_specifier(){
+    printf("\nENTREI - <type_specifier>");
     if (lookahead == INT){
         consome(INT);
     }else{
@@ -728,6 +748,7 @@ void type_specifier(){
 }
 
 void var_decl_list() {
+    printf("\nENTREI - <var_decl_list>");
     variable_id();
     while(1){
         if(lookahead == VIRGULA){
@@ -736,22 +757,21 @@ void var_decl_list() {
         }else{
             break;
         }
-    }    
-}
-
-void variable_id() {
-    consome(IDENTIFICADOR);
-    while (1){
-        if(lookahead == ATRIBUICAO){
-            consome(ATRIBUICAO);
-            expr();
-        }else{
-            break;   
-        }
     }
 }
 
+void variable_id() {
+    printf("\nENTREI - <variable_id>");
+    consome(IDENTIFICADOR);
+    if(lookahead == ATRIBUICAO){
+        consome(ATRIBUICAO);
+        expr();
+    }
+}
+
+
 void stmt() {
+    printf("\nENTREI - <stmt>");
     if(lookahead == ABRE_CHAVE){
         compound_stmt();
     }else if(lookahead == IDENTIFICADOR){
@@ -776,14 +796,15 @@ void stmt() {
 }
 
 void assig_stmt() {
+    printf("\nENTREI - <assig_stmt>");
     consome(IDENTIFICADOR);
-    if(lookahead == ATRIBUICAO){
-        expr();
-        consome(PONTO_VIRGULA);
-    }
+    consome(ATRIBUICAO);
+    expr();
+    consome(PONTO_VIRGULA);
 }
 
 void cond_stmt() {
+    printf("\nENTREI - <cond_stmt>");
     consome(IF);
     consome(ABRE_PAR);
     expr();
@@ -796,6 +817,7 @@ void cond_stmt() {
 }
 
 void while_stmt() {
+    printf("\nENTREI - <while_stmt>");
     consome(WHILE);
     consome(ABRE_PAR);
     expr();
@@ -804,6 +826,7 @@ void while_stmt() {
 }
 
 void expr() {
+    printf("\nENTREI - <expr>");
     conjunction();
     while(1){
         if(lookahead == OPERADOR_COMPARACAO_OR){
@@ -816,6 +839,7 @@ void expr() {
 }
 
 void conjunction() {
+    printf("\nENTREI - <conjunction>");
     comparison();
     while(1){
         if(lookahead == OPERADOR_COMPARACAO_AND){
@@ -828,6 +852,7 @@ void conjunction() {
 }
 
 void comparison() {
+    printf("\nENTREI - <comparison>");
     sum();
     if(lookahead == OPERADOR_COMPARACAO_MENOR ||
         lookahead == OPERADOR_COMPARACAO_MENOR_IGUAL ||
@@ -840,7 +865,9 @@ void comparison() {
     }
 }
 
+
 void relation(){
+    printf("\nENTREI - <relation>");
     if (lookahead == OPERADOR_COMPARACAO_MENOR) {
         consome(OPERADOR_COMPARACAO_MENOR);
     } else if (lookahead == OPERADOR_COMPARACAO_MENOR_IGUAL) {
@@ -857,6 +884,7 @@ void relation(){
 }
 
 void sum() {
+    printf("\nENTREI - <sum>");
     term();
     while (1){
        if(lookahead == OPERADOR_SOMA){
@@ -871,26 +899,28 @@ void sum() {
     }
 }
 
-void term() {
+void term(){
+    printf("\nENTREI - <term>");
     factor();
     while (1){
-        if(lookahead == OPERADOR_MULTIPLICACAO){
-             consome(OPERADOR_MULTIPLICACAO);
-             factor();
-        }else if(lookahead == OPERADOR_DIVISAO){
-             consome(OPERADOR_DIVISAO);
-             factor();
+        if (lookahead== OPERADOR_MULTIPLICACAO){
+            consome(OPERADOR_MULTIPLICACAO);
+            factor();
+        }else if (lookahead == OPERADOR_SUBTRACAO){
+            consome(OPERADOR_SUBTRACAO);
+            factor();
         }else{
-             break;
+            break;
         }
-     }
- }
+    }
+}
 
 void factor() {
-    if(lookahead == HEXADECIMAL){
-        consome(HEXADECIMAL);
-    }else if(lookahead == TABELA_ASCII){
-        consome(TABELA_ASCII);
+    printf("\nENTREI - <factor>");
+    if(lookahead == INTCONST){
+        consome(INTCONST);
+    }else if(lookahead == CHARCONST){
+        consome(CHARCONST);
     } else if(lookahead == IDENTIFICADOR){
         consome(IDENTIFICADOR);
     }else if(lookahead == ABRE_PAR){
@@ -907,9 +937,24 @@ int main(){
     entrada = ler_arquivo("Arquivos de Teste/Arquivo_A.txt");
 
     info_atomo = obter_atomo();
-    lookahead = info_atomo.atomo;
 
-    program();
+    while(info_atomo.atomo != ERRO || info_atomo.atomo != EOS){
+        info_atomo = obter_atomo();
+        if(info_atomo.atomo == ERRO){
+            printf("\nERRO");
+            return 0;
+        }
+    
+        if(info_atomo.atomo == EOS){
+            printf("FIM DO ANALISADOR LEXICO");
+            return 0;
+        }
+    }
+
+    // lookahead = info_atomo.atomo;
+
+    // program();
+    // consome(EOS);
 
     return 0;
 }

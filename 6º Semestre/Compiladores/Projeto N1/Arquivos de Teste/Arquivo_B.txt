@@ -1,5 +1,11 @@
-int main(void){
-   int _num; 
-   _num =   0xFF '65'; 
-   printf(_num);//teste
+void main(void) {
+    int a, b;
+    a = 0xA;
+    b = 0xB;
+    
+    if (a < b) {
+        a = a / 0xB;
+    }
+    
+    writeint(a);
 }
