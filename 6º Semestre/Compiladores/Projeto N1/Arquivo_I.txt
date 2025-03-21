@@ -1,0 +1,3 @@
+void main(void) {
+    int n = 0x1G;  // G não é válido em hexadecimal
+}

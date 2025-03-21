@@ -1,9 +1,0 @@
-void main(void){
-   while( (_n1 == _n2)  &&  ( _n1 > _NNn3 ) ) 
-   { /* TESTE */
-       _maior = _n1;
-
-       _maior = _n2;
-    }
-    writeint(_maior); // imprime o maior valor
-}

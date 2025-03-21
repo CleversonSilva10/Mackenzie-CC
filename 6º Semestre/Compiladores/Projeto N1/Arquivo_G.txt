@@ -1,0 +1,3 @@
+void main(void) {
+    char c = ' 128';  // deveria ser '65'
+}
